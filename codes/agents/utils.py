@@ -103,10 +103,6 @@ class ExperimentGenerator(object):
       self.dict_agent_kwargs[agent_name] = agent_kwargs
       self.dict_agent_constructor[agent_name] = agent_class
 
-#   def build_agent(self, agent_name):
-#       agent_kwargs = self.dict_agent_kwargs[agent_name].copy()
-#       agent_kwargs['game'] =  pyspiel.load_game(self.game_name)
-#       return self.dict_agent_constructor[agent_name](**agent_kwargs)
 
   def save_results(self, results, game_name, agent_name):
     #Buil path
@@ -230,7 +226,6 @@ class ExperimentGenerator(object):
     print("Best multipliers:")
     print(self.tuned_rates)
 
-#I was out of memory, so I limited the number of workers
 #@ray.remote(num_cpus=6)
 @ray.remote
 def fit_agent(agent_contstructor, agent_kwargs, game_name, base_constant, training_kwargs,seed):
