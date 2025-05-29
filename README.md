@@ -6,7 +6,4 @@ This codebase is built upon the implementation from [IIG-tree-adaptation](https:
 
 - `OMD with Virtual Transition Weighted Negentropy Regularization`: A novel Online Mirror Descent algorithm incorporating virtual transitions and weighted negentropy regularization for Last-iterate Convergence in imperfect information games. 
 
-## Results
-
-For detailed comparison results between our method and the baselines, please see [ours_vs_baselines.pdf](ours_vs_baselines.pdf).
 
