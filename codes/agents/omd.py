@@ -119,7 +119,6 @@ class OMDBase(object):
     X = self.policy_shape[0]/2
     A = self.policy_shape[1]
     H = self.game.max_game_length()
-    #print(H)
 
     #Learning rate 
     self.base_learning_rate = H**lr_pow_H * A**lr_pow_A * X**lr_pow_X * budget**lr_pow_T * lr_constant * base_constant
@@ -131,7 +130,6 @@ class OMDBase(object):
     self.legal_actions_indicator=self.legal_actions_mask
     self.number_actions_from_idx=self.legal_actions_indicator.sum(axis=-1)
     self.uniform_policy=self.legal_actions_indicator/self.number_actions_from_idx[:,np.newaxis]
-    # print(self.legal_actions_indicator)
   
   def reward_to_loss(self,reward):
     '''Transform reward into loss
@@ -211,14 +209,10 @@ class OMDBase(object):
         action, action_idx = self.sample_action_from_idx(state_idx, return_idx=True)
         #Update cumulative plans
         policy = self.get_current_policy(state_idx)
-        #print("policy")
-        #print(policy)
         self.cumulative_plan[state_idx,:] += (cum_plans[current_player]-self.cumulative_plan[state_idx,:].sum())* policy
         cum_plans[current_player] = self.cumulative_plan[state_idx, action_idx]
         #Update plans
         plans[current_player] *= policy[action_idx]
-        #print("plans")
-        #print(plans)
         #Record transition
         transition = {
           'player': current_player,
@@ -236,9 +230,6 @@ class OMDBase(object):
     trajectory[-1]['loss'] = losses[trajectory[-1]['player']] 
     if len(trajectory) > 1:
       trajectory[-2]['loss'] = losses[trajectory[-2]['player']] 
-    #print("trajectory")
-    #print(trajectory)
-
     return trajectory
 
   def update(self, trajectory):
@@ -263,7 +254,6 @@ class OMDBase(object):
       self.current_logit[state_idx,:]-=logz*legal_actions
       values[player] = logz/lr
       new_policy=np.exp(self.current_logit[state_idx,:],where=legal_actions)*legal_actions
-      #print(self.current_policy.action_probability_array)
 
       #Update new policy 
       self.set_current_policy(state_idx, new_policy)
@@ -298,7 +288,6 @@ class OMDBase(object):
       recorded_steps=[self.budget-1]+[round(first_point*math.exp(i*log_step))-1 for i in range(number_points-2,0,-1)]+[first_point-1]
       recorded_steps= list(set(recorded_steps)) #.sort(reverse=True)
       recorded_steps.sort(reverse=True)
-      #print(recorded_steps)
     for step in tqdm(range(self.budget), disable=(verbose < 1 )):
       #Sample a trajectory
       trajectory = self.sample_trajectory(step)
